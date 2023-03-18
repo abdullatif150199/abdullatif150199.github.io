@@ -214,17 +214,25 @@
               </div>
               <div class="row justify-content-center">
                   <div class="col-md-6 col-10">
-                      <form>
+                    <div class="alert alert-primary alert-dismissible fade show d-none" role="alert">
+                      <strong>Terimakasih!</strong> Pesan anda sudah kami terima.
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                      <form name="my-portofolio-form">
                           <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" aria-describedby="nama">
+                            <input type="text" class="form-control" id="name" aria-describedby="nama" name="nama">
                             <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp">
+                            <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="email">
                             <div class="mb-3">
                               <label for="message" class="form-label">Message</label>
-                              <textarea class="form-control" id="message" rows="3"></textarea>
+                              <textarea class="form-control" id="message" rows="3" name="pesan"></textarea>
                             </div>
-                          <button type="submit" class="btn btn-warning">Submit</button>
+                          <button type="submit" class="btn btn-warning btn-kirim">Submit</button>
+                          <button class="btn btn-warning btn-loading d-none" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
                         </form>
                   </div>
               </div>
@@ -267,6 +275,29 @@
         sidebar.classList.toggle("open");
         });
     </script>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwP9Jght-1t6X1AUlAY5HAukcW0KbuoWo2IVGdk7WSLvIsR-WNMR3EM1KkATSB2Up_YGQ/exec'
+    const form = document.forms['my-portofolio-form'];
+    const btnKirim = document.querySelector('.btn-kirim');
+    const btnLoading = document.querySelector('.btn-loading');
+    const alert = document.querySelector('.alert');
+
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      btnLoading.classList.toggle('d-none');
+      btnKirim.classList.toggle('d-none');
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          btnLoading.classList.toggle('d-none');
+          btnKirim.classList.toggle('d-none');
+          alert.classList.toggle('d-none');
+          form.reset();
+          console.log('Success!', response)})
+        .catch(error => console.error('Error!', error.message))
+    })
+  </script>
 
     <!-- akhir dari jumbotron -->
 
